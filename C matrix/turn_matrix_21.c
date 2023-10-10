@@ -21,6 +21,8 @@ int main(){
     printf("Matrix after turn:\n");
     rotate_output(matrix, &row, &column);
 
+    mem_free(matrix, &row);
+
     return 0;
 }
 
