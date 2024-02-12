@@ -154,6 +154,52 @@ carri_bit = 1 если:
 * (a)1 + (b)0 + (carry_bit)(1) -> 10
 * (a)0 + (b)1 + (carry_bit)(1) -> 10
 
+**2. Вычитание**
+
+Отличается от суммы вычислением carry_bit
+
+```
+u_int32_t s21_sub_bits(u_int32_t a, u_int32_t b) {
+    bool carry_bit = 0;
+    u_int32_t res = 0;
+
+    for (int i = 0; i < 32; ++i) {
+        bool a_bit = s21_get_bit(a, i);
+        bool b_bit = s21_get_bit(b, i);
+        bool tmp_res = (a_bit ^ carry_bit) ^ b_bit;
+
+        if (tmp_res) {
+            s21_set_bit_on(&res, i);
+        } 
+        
+        carry_bit = (!a_bit & b_bit) | ((!a_bit | b_bit) & carry_bit);
+    }
+    return res;
+}
+```
+
+**3. Умножение**
+
+Решение задачи побитового умножения сводится к разложению одного из множителей (лучше - меньшего) на сумму степени двоек. 
+
+```
+int binary_mult(int a, int b) {
+  int res = 0;
+  int l_mult = a;
+  int r_mult = b;
+
+  // l_mult x r_mult
+
+  for (int i = 31; i >= 0; --i) {
+    if (s21_get_bit(r_mult, i)) {
+      res += l_mult << i;
+    }
+  }
+
+  return res;
+}
+```
+
 
 ## Африфметические операции 4
 
